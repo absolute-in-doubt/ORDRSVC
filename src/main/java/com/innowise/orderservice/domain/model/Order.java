@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "orders")
 @Entity
@@ -26,6 +27,9 @@ public class Order {
     private BigDecimal totalPrice;
 
     private boolean deleted;
+
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<OrderItems> items;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

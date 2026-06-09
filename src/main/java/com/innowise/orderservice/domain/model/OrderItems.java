@@ -14,11 +14,13 @@ public class OrderItems {
     @GeneratedValue(generator = "order_items_gen")
     private Long id;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 
-    @Column(name = "item_id")
-    private Long itemId;
+    @ManyToOne
+    @JoinColumn(name="item_id", referencedColumnName = "id")
+    private Item item;
 
     @Column(name="quantity")
     private Long quantity;
