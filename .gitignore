@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Application ###
+src/main/resources/liquibase.properties
+env
+env/app.env
+env/postgres.env
+env/jwks.env
+env/client-secrets.env
+env/auth.env
