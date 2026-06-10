@@ -1,5 +1,6 @@
-package com.innowise.orderservice.infrastructure.specification;
+package com.innowise.orderservice.infrastructure.persistence.specification;
 
+import com.innowise.orderservice.application.dto.OrderFilter;
 import com.innowise.orderservice.domain.model.Order;
 import com.innowise.orderservice.domain.model.OrderStatus;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,5 +20,11 @@ public class OrderSpecification {
                 root.get("status").in(statuses);
     }
 
-    //TODO add creation from a filter DTO
+    public static Specification<Order> formFilter(OrderFilter filter){
+        return Specification.allOf(
+                withCreationDate(filter.creationDate()),
+                withAnyStatus(filter.orderStatuses())
+        );
+    }
+
 }

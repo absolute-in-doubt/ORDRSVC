@@ -16,12 +16,15 @@ import java.util.List;
 @Data
 public class Order {
 
+    @SequenceGenerator(name = "order_gen", sequenceName = "order_seq")
+
     @Id
+    @GeneratedValue(generator = "order_gen")
     private Long id;
     @Column(name="user_id")
     private Long userId;
 
-    //private OrderStatus status;
+    private OrderStatus status;
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;

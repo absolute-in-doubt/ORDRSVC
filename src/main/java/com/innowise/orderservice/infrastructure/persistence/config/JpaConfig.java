@@ -1,4 +1,4 @@
-package com.innowise.orderservice.infrastructure.persistence;
+package com.innowise.orderservice.infrastructure.persistence.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
