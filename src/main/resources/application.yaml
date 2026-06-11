@@ -29,3 +29,38 @@ springdoc:
 
 server:
   port: 8082
+
+application:
+  userservice:
+    getUserUriUnformatted: ${USRSVC_GET_USER_URI_NOT_FORMATTED}
+    # smth like ".../users/" , so the UserClient appends the needed userId to the end of the url: ".../users/1"
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 2s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-exceptions:
+          - java.io.IOException
+          - org.springframework.web.client.ResourceAccessException
+
+
+  retry:
+    instances:
+      userService:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - java.io.IOException
+          - org.springframework.web.client.ResourceAccessException

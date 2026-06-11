@@ -7,6 +7,7 @@ import java.util.List;
 
 public record OrderResponseDto(
         Long id,
+        Long userId,
         OrderStatus status,
         BigDecimal totalPrice,
         List<OrderItemResponseDto> items

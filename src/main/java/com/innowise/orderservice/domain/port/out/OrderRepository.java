@@ -15,4 +15,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     @Modifying
     @Query("UPDATE Order o SET o.deleted = true WHERE o.id = :orderId")
     void deleteById(@Param("orderId") @NotNull Long id);
+
+
+    //TODO add all custom methods so the requests return only those orders that have "deleted" = false
 }
