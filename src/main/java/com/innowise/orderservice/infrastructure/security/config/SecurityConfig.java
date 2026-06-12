@@ -3,11 +3,11 @@ package com.innowise.orderservice.infrastructure.security.config;
 
 import com.innowise.orderservice.infrastructure.security.converter.JwtConverter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,19 +16,17 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.util.AntPathMatcher;
 
 @Configuration
-@EnableConfigurationProperties(SecurityProperties.class)
-@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final SecurityProperties properties;
+    @Value("${application.security.jwksUrl}")
+    private String jwksUrl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtConverter jwtAuthenticationConverter,
-                                           BearerTokenResolver publicPathsBearerTokenResolver
+                                           BearerTokenResolver bearerTokenResolver
     ) throws Exception {
 
         http
@@ -45,7 +43,7 @@ public class SecurityConfig {
                         .anyRequest().hasAnyAuthority("USER", "ADMIN")
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .bearerTokenResolver(publicPathsBearerTokenResolver)
+                        .bearerTokenResolver(bearerTokenResolver)
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
                 )
                 .anonymous(Customizer.withDefaults())
@@ -55,16 +53,11 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withJwkSetUri(properties.jwksUrl()).build();
+        return NimbusJwtDecoder.withJwkSetUri(jwksUrl).build();
     }
 
     @Bean
     public BearerTokenResolver publicPathsBearerTokenResolver() {
-        DefaultBearerTokenResolver delegate = new DefaultBearerTokenResolver();
-        AntPathMatcher matcher = new AntPathMatcher();
-        return request -> {
-            boolean isPublic = properties.paths().publicPaths().stream().anyMatch(p -> matcher.match(p, request.getServletPath()));
-            return isPublic ? null : delegate.resolve(request);
-        };
+        return new DefaultBearerTokenResolver();
     }
 }

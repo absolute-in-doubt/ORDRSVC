@@ -39,7 +39,8 @@ application:
   userservice:
     getUserUriUnformatted: ${USRSVC_GET_USER_URI_NOT_FORMATTED}
     # smth like ".../users/" , so the UserClient appends the needed userId to the end of the url: ".../users/1"
-
+  security:
+    jwksUrl: ${JWKS_URL}
 
 resilience4j:
   circuitbreaker:
