@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<FullOrderResponseDto> getOrdersVyUserId(Long userId) {
+    public List<FullOrderResponseDto> getOrdersByUserId(Long userId) {
         return List.of();
     }
 

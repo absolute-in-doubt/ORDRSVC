@@ -18,7 +18,7 @@ public interface OrderService {
 
     Page<FullOrderResponseDto> getOrderFilteredAndPaged(OrderFilter filter, Pageable pageable);
 
-    List<FullOrderResponseDto> getOrdersVyUserId(Long userId);
+    List<FullOrderResponseDto> getOrdersByUserId(Long userId);
 
     FullOrderResponseDto updateOrderById(Long orderId , UpdateOrderRequestDto updateOrderRequest);
 

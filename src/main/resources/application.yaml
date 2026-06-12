@@ -14,12 +14,17 @@ spring:
     url: ${POSTGRES_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-liquibase:
-  change-log: db/changelog/db.changelog-master.yaml
-  enabled: true                                                                                                                                                                                                                ▆
-  url: ${POSTGRES_URL}
-  user: ${POSTGRES_USER}
-  password: ${POSTGRES_PASSWORD}
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yaml
+    enabled: true                                                                                                                                                                                                                ▆
+    url: ${POSTGRES_URL}
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  cache:
+    cache-names:
+      - userInfo
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=3m,recordStats
 
 springdoc:
   api-docs:
