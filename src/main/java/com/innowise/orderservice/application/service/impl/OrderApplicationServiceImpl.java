@@ -2,7 +2,7 @@ package com.innowise.orderservice.application.service.impl;
 
 import com.innowise.orderservice.application.dto.*;
 import com.innowise.orderservice.application.mapper.OrderMapper;
-import com.innowise.orderservice.application.service.OrderService;
+import com.innowise.orderservice.application.service.OrderApplicationService;
 import com.innowise.orderservice.domain.exception.ItemNotFoundException;
 import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import com.innowise.orderservice.domain.model.Item;
@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class OrderApplicationServiceImpl implements OrderApplicationService {
 
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
@@ -73,8 +73,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<FullOrderResponseDto> getOrderFilteredAndPaged(Long userId, OrderFilter filter, Pageable pageable) {
 
-        Specification<Order> orderSpecification = OrderSpecification.fromFilter(filter);
-        //TODO add userId filtering, so that user won't get other users' orders
+
+        Specification<Order> orderSpecification =
+                Specification.allOf(
+                        OrderSpecification.fromFilter(filter),
+                        OrderSpecification.withUserId(userId)
+                );
 
         UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
 
