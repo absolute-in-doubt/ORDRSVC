@@ -2,6 +2,7 @@ package com.innowise.orderservice.application.mapper.impl;
 
 import com.innowise.orderservice.application.dto.OrderItemResponseDto;
 import com.innowise.orderservice.application.dto.OrderResponseDto;
+import com.innowise.orderservice.application.dto.UpdateOrderRequestDto;
 import com.innowise.orderservice.application.mapper.OrderItemsMapper;
 import com.innowise.orderservice.application.mapper.OrderMapper;
 import com.innowise.orderservice.domain.model.Order;
@@ -26,5 +27,10 @@ public class OrderMapperImpl implements OrderMapper {
                 entity.getTotalPrice(),
                 orderItemsMapper.toDtoList(entity.getItems())
         );
+    }
+
+    @Override
+    public void updateEntity(UpdateOrderRequestDto updateRequest, Order order) {
+        order.setItems(orderItemsMapper.toEntityList(updateRequest.items()));
     }
 }

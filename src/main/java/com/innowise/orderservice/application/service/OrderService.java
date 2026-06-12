@@ -5,6 +5,7 @@ import com.innowise.orderservice.application.dto.FullOrderResponseDto;
 import com.innowise.orderservice.application.dto.OrderFilter;
 import com.innowise.orderservice.application.dto.UpdateOrderRequestDto;
 import com.innowise.orderservice.domain.exception.ItemNotFoundException;
+import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,13 +15,13 @@ public interface OrderService {
 
     FullOrderResponseDto createOrder(Long userId, CreateOrderRequestDto createOrderRequest) throws ItemNotFoundException;
 
-    FullOrderResponseDto getOrderById(Long orderId);
+    FullOrderResponseDto getOrderById(Long userId, Long orderId) throws OrderNotFoundException;
 
-    Page<FullOrderResponseDto> getOrderFilteredAndPaged(OrderFilter filter, Pageable pageable);
+    Page<FullOrderResponseDto> getOrderFilteredAndPaged(Long userId, OrderFilter filter, Pageable pageable);
 
     List<FullOrderResponseDto> getOrdersByUserId(Long userId);
 
-    FullOrderResponseDto updateOrderById(Long orderId , UpdateOrderRequestDto updateOrderRequest);
+    FullOrderResponseDto updateOrderById(Long userId, Long orderId , UpdateOrderRequestDto updateOrderRequest) throws OrderNotFoundException;
 
-    void deleteOrderById(Long orderId);
+    void deleteOrderById(Long userId, Long orderId) throws OrderNotFoundException;
 }

@@ -20,10 +20,20 @@ public class OrderSpecification {
                 root.get("status").in(statuses);
     }
 
-    public static Specification<Order> formFilter(OrderFilter filter){
+    public static Specification<Order> withDeletedFalse() {
+        return (root, query, cb) -> cb.equal(root.get("deleted"), false);
+    }
+
+    public static Specification<Order> withUserId(Long userId) {
+        return (root, query, cb) -> (userId == null) ? null :
+                cb.equal(root.get("userId"), userId);
+    }
+
+    public static Specification<Order> fromFilter(OrderFilter filter){
         return Specification.allOf(
                 withCreationDate(filter.creationDate()),
-                withAnyStatus(filter.orderStatuses())
+                withAnyStatus(filter.orderStatuses()),
+                withDeletedFalse()
         );
     }
 

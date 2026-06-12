@@ -4,16 +4,21 @@ import com.innowise.orderservice.application.dto.*;
 import com.innowise.orderservice.application.mapper.OrderMapper;
 import com.innowise.orderservice.application.service.OrderService;
 import com.innowise.orderservice.domain.exception.ItemNotFoundException;
+import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import com.innowise.orderservice.domain.model.Item;
 import com.innowise.orderservice.domain.model.Order;
 import com.innowise.orderservice.domain.model.OrderItems;
 import com.innowise.orderservice.domain.port.out.ItemRepository;
 import com.innowise.orderservice.domain.port.out.OrderRepository;
 import com.innowise.orderservice.domain.port.out.UserServiceClient;
+import com.innowise.orderservice.infrastructure.persistence.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,27 +57,67 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public FullOrderResponseDto getOrderById(Long orderId) {
-        return null;
+    public FullOrderResponseDto getOrderById(Long userId, Long orderId) throws OrderNotFoundException {
+
+        Order order = orderRepository.findByIdWithDeletedFalse(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        if(!userId.equals(order.getUserId()))
+            throw new AccessDeniedException("Cannot modify an order that doesn't belong to you");
+
+        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+
+        return new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order));
     }
 
     @Override
-    public Page<FullOrderResponseDto> getOrderFilteredAndPaged(OrderFilter filter, Pageable pageable) {
-        return null;
+    public Page<FullOrderResponseDto> getOrderFilteredAndPaged(Long userId, OrderFilter filter, Pageable pageable) {
+
+        Specification<Order> orderSpecification = OrderSpecification.fromFilter(filter);
+        //TODO add userId filtering, so that user won't get other users' orders
+
+        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+
+        return orderRepository.findAll(orderSpecification, pageable)
+                .map(order -> new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order)));
     }
 
     @Override
     public List<FullOrderResponseDto> getOrdersByUserId(Long userId) {
-        return List.of();
+
+        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+
+        return orderRepository.findByUserIdWithDeletedFalse(userId).stream()
+                .map(order -> new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order))).toList();
     }
 
     @Override
-    public FullOrderResponseDto updateOrderById(Long orderId, UpdateOrderRequestDto updateOrderRequest) {
-        return null;
+    @Transactional
+    public FullOrderResponseDto updateOrderById(Long userId, Long orderId, UpdateOrderRequestDto updateOrderRequest)
+            throws OrderNotFoundException {
+
+        Order order = orderRepository.findByIdWithDeletedFalse(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        if(!userId.equals(order.getUserId()))
+            throw new AccessDeniedException("Cannot modify an order that doesn't belong to you");
+
+        orderMapper.updateEntity(updateOrderRequest, order);
+
+        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+
+        return new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order));
     }
 
     @Override
-    public void deleteOrderById(Long orderId) {
+    public void deleteOrderById(Long userId, Long orderId) throws OrderNotFoundException {
 
+        Order order = orderRepository.findByIdWithDeletedFalse(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        if(!userId.equals(order.getUserId()))
+            throw new AccessDeniedException("Cannot modify an order that doesn't belong to you");
+
+        orderRepository.deleteById(orderId);
     }
 }
