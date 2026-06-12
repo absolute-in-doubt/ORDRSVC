@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
     @Modifying
+    @Transactional
     @Query("UPDATE Order o SET o.deleted = true WHERE o.id = :orderId")
     void deleteById(@Param("orderId") @NotNull Long id);
 
@@ -26,6 +28,4 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     @Query("SELECT o FROM Order o WHERE o.userId = :userId AND o.deleted = false")
     List<Order> findByUserIdWithDeletedFalse(@Param("userId") @NotNull Long userId);
-
-    //TODO add all custom methods so the requests return only those orders that have "deleted" = false
 }
