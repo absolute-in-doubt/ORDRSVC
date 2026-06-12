@@ -4,6 +4,8 @@ import com.innowise.orderservice.application.dto.CreateOrderRequestDto;
 import com.innowise.orderservice.application.dto.FullOrderResponseDto;
 import com.innowise.orderservice.application.dto.OrderFilter;
 import com.innowise.orderservice.application.dto.UpdateOrderRequestDto;
+import com.innowise.orderservice.domain.exception.ItemNotFoundException;
+import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import com.innowise.orderservice.infrastructure.persistence.security.model.JwtUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,17 +15,17 @@ import java.util.List;
 
 public interface OrderController {
 
-    ResponseEntity<FullOrderResponseDto> createUser(JwtUserDetails jwtUserDetails, CreateOrderRequestDto createOrderRequestDto);
+    ResponseEntity<FullOrderResponseDto> createOrder(JwtUserDetails jwtUserDetails, CreateOrderRequestDto createOrderRequestDto) throws ItemNotFoundException;
 
-    ResponseEntity<FullOrderResponseDto> getOrderById(JwtUserDetails jwtUserDetails, Long orderId);
+    ResponseEntity<FullOrderResponseDto> getOrderById(JwtUserDetails jwtUserDetails, Long orderId) throws OrderNotFoundException;
 
     ResponseEntity<Page<FullOrderResponseDto>> getOrdersFilteredAndPaged(JwtUserDetails jwtUserDetails, OrderFilter orderFilter, Pageable pageable);
 
-    ResponseEntity<List<FullOrderResponseDto>> getOrdersByUserId(JwtUserDetails jwtUserDetails);
+    ResponseEntity<List<FullOrderResponseDto>> getOrdersByUserId(JwtUserDetails jwtUserDetails, Long userId);
 
-    ResponseEntity<FullOrderResponseDto> updateOrderById(JwtUserDetails jwtUserDetails, Long orderId, UpdateOrderRequestDto updateOrderRequestDto);
+    ResponseEntity<FullOrderResponseDto> updateOrderById(JwtUserDetails jwtUserDetails, Long orderId, UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException;
 
-    ResponseEntity<Void> deleteById(JwtUserDetails jwtUserDetails, Long orderId);
+    ResponseEntity<Void> deleteById(JwtUserDetails jwtUserDetails, Long orderId) throws OrderNotFoundException;
 
 
 }
