@@ -6,7 +6,7 @@ import com.innowise.orderservice.application.dto.OrderFilter;
 import com.innowise.orderservice.application.dto.UpdateOrderRequestDto;
 import com.innowise.orderservice.domain.exception.ItemNotFoundException;
 import com.innowise.orderservice.domain.exception.OrderNotFoundException;
-import com.innowise.orderservice.infrastructure.persistence.security.model.JwtUserDetails;
+import com.innowise.orderservice.infrastructure.security.model.JwtUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

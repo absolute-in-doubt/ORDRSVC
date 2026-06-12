@@ -1,7 +1,7 @@
-package com.innowise.orderservice.infrastructure.persistence.security.config;
+package com.innowise.orderservice.infrastructure.security.config;
 
 
-import com.innowise.orderservice.infrastructure.persistence.security.converter.JwtConverter;
+import com.innowise.orderservice.infrastructure.security.converter.JwtConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,6 @@ import org.springframework.util.AntPathMatcher;
 
 @Configuration
 @EnableConfigurationProperties(SecurityProperties.class)
-@EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -43,7 +42,7 @@ public class SecurityConfig {
                 .requestCache(AbstractHttpConfigurer::disable)
                 .servletApi(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
+                        .anyRequest().hasAnyAuthority("USER", "ADMIN")
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .bearerTokenResolver(publicPathsBearerTokenResolver)

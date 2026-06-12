@@ -1,7 +1,7 @@
-package com.innowise.orderservice.infrastructure.persistence.security.converter;
+package com.innowise.orderservice.infrastructure.security.converter;
 
 
-import com.innowise.orderservice.infrastructure.persistence.security.model.JwtUserDetails;
+import com.innowise.orderservice.infrastructure.security.model.JwtUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

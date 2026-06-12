@@ -1,4 +1,4 @@
-package com.innowise.orderservice.infrastructure.persistence.security.model;
+package com.innowise.orderservice.infrastructure.security.model;
 
 public record JwtUserDetails(
         Long userId,

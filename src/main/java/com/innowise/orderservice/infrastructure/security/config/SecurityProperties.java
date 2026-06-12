@@ -1,4 +1,4 @@
-package com.innowise.orderservice.infrastructure.persistence.security.config;
+package com.innowise.orderservice.infrastructure.security.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

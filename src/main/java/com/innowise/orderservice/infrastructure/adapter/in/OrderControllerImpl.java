@@ -8,7 +8,7 @@ import com.innowise.orderservice.application.service.OrderApplicationService;
 import com.innowise.orderservice.domain.exception.ItemNotFoundException;
 import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import com.innowise.orderservice.domain.port.in.OrderController;
-import com.innowise.orderservice.infrastructure.persistence.security.model.JwtUserDetails;
+import com.innowise.orderservice.infrastructure.security.model.JwtUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
