@@ -29,8 +29,4 @@ public class OrderMapperImpl implements OrderMapper {
         );
     }
 
-    @Override
-    public void updateEntity(UpdateOrderRequestDto updateRequest, Order order) {
-        order.setItems(orderItemsMapper.toEntityList(updateRequest.items()));
-    }
 }

@@ -21,7 +21,7 @@ public interface OrderApplicationService {
 
     List<FullOrderResponseDto> getOrdersByUserId(Long userId, Long userIdPathParamValue);
 
-    FullOrderResponseDto updateOrderById(Long userId, Long orderId , UpdateOrderRequestDto updateOrderRequest) throws OrderNotFoundException;
+    FullOrderResponseDto updateOrderById(Long userId, Long orderId , UpdateOrderRequestDto updateOrderRequest) throws OrderNotFoundException, ItemNotFoundException;
 
     void deleteOrderById(Long userId, Long orderId) throws OrderNotFoundException;
 }

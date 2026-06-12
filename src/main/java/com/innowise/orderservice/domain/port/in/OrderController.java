@@ -23,7 +23,7 @@ public interface OrderController {
 
     ResponseEntity<List<FullOrderResponseDto>> getOrdersByUserId(JwtUserDetails jwtUserDetails, Long userId);
 
-    ResponseEntity<FullOrderResponseDto> updateOrderById(JwtUserDetails jwtUserDetails, Long orderId, UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException;
+    ResponseEntity<FullOrderResponseDto> updateOrderById(JwtUserDetails jwtUserDetails, Long orderId, UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException, ItemNotFoundException;
 
     ResponseEntity<Void> deleteById(JwtUserDetails jwtUserDetails, Long orderId) throws OrderNotFoundException;
 

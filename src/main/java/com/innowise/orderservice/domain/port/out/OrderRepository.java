@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
+public interface OrderRepository extends
+        JpaRepository<Order, Long>,
+        JpaSpecificationExecutor<Order>,
+        CustomOrderRepository {
 
     @Modifying
     @Transactional
@@ -22,10 +25,10 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     void deleteById(@Param("orderId") @NotNull Long id);
 
 
-    @Query("SELECT o FROM Order o WHERE o.id = :orderId AND o.deleted = false")
+    @Query("SELECT o FROM Order o LEFT JOIN FETCH o.items WHERE o.id = :orderId AND o.deleted = false")
     Optional<Order> findByIdWithDeletedFalse(@Param("orderId") @NotNull Long id);
 
 
-    @Query("SELECT o FROM Order o WHERE o.userId = :userId AND o.deleted = false")
+    @Query("SELECT o FROM Order o LEFT JOIN FETCH o.items WHERE o.userId = :userId AND o.deleted = false")
     List<Order> findByUserIdWithDeletedFalse(@Param("userId") @NotNull Long userId);
 }

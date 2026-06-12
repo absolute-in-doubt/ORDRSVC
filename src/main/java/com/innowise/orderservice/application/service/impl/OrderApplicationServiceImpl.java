@@ -8,11 +8,13 @@ import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import com.innowise.orderservice.domain.model.Item;
 import com.innowise.orderservice.domain.model.Order;
 import com.innowise.orderservice.domain.model.OrderItems;
+import com.innowise.orderservice.domain.model.OrderStatus;
 import com.innowise.orderservice.domain.port.out.ItemRepository;
 import com.innowise.orderservice.domain.port.out.OrderRepository;
 import com.innowise.orderservice.domain.port.out.UserServiceClient;
 import com.innowise.orderservice.infrastructure.persistence.specification.OrderSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderApplicationServiceImpl implements OrderApplicationService {
@@ -37,6 +40,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
         Order order = new Order();
         order.setUserId(userId);
+        order.setStatus(OrderStatus.CREATED);
 
         for(OrderItemRequestDto itemRequestDto : createOrderRequest.items()){
             Item item = itemRepository.findById(itemRequestDto.itemId()).orElseThrow(() -> new ItemNotFoundException(itemRequestDto.itemId()));
@@ -82,7 +86,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
         UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
 
-        return orderRepository.findAll(orderSpecification, pageable)
+        return orderRepository.findAll(orderSpecification, pageable, "order-with-items")
                 .map(order -> new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order)));
     }
 
@@ -101,7 +105,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
     @Override
     @Transactional
     public FullOrderResponseDto updateOrderById(Long userId, Long orderId, UpdateOrderRequestDto updateOrderRequest)
-            throws OrderNotFoundException {
+            throws OrderNotFoundException, ItemNotFoundException {
 
         Order order = orderRepository.findByIdWithDeletedFalse(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
@@ -109,7 +113,22 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
         if(!userId.equals(order.getUserId()))
             throw new AccessDeniedException("Cannot modify an order that doesn't belong to you");
 
-        orderMapper.updateEntity(updateOrderRequest, order);
+
+        log.trace("Initial order; {}", order);
+
+        order.getItems().clear();
+        for(OrderItemRequestDto itemRequestDto : updateOrderRequest.items()){
+            Item item = itemRepository.findById(itemRequestDto.itemId()).orElseThrow(() -> new ItemNotFoundException(itemRequestDto.itemId()));
+
+            OrderItems orderItems = new OrderItems();
+
+            orderItems.setOrder(order);
+            orderItems.setItem(item);
+            orderItems.setQuantity(itemRequestDto.quantity());
+            order.addOrderItems(orderItems);
+        }
+
+        log.trace("Updated order; {}", order);
 
         UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
 

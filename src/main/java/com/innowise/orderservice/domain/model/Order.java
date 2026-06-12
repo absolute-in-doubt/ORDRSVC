@@ -1,10 +1,7 @@
 package com.innowise.orderservice.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,6 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "orders")
+@NamedEntityGraph(
+        name = "order-with-items",
+        attributeNodes = {
+                @NamedAttributeNode(
+                        value = "items",
+                        subgraph = "items-subgraph"
+                )
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "items-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("item")
+                        }
+                )
+        }
+)
 @Entity
 @EntityListeners({AuditingEntityListener.class})
 @Data
@@ -39,7 +53,7 @@ public class Order {
 
     private boolean deleted;
 
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItems> items;
 
     @CreatedDate

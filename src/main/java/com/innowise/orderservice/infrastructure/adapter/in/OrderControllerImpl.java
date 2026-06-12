@@ -73,7 +73,7 @@ public class OrderControllerImpl implements OrderController {
     public ResponseEntity<FullOrderResponseDto> updateOrderById(
             @AuthenticationPrincipal JwtUserDetails jwtUserDetails,
             @PathVariable("orderId") Long orderId,
-            @RequestBody UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException {
+            @RequestBody UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException, ItemNotFoundException {
 
         return ResponseEntity.ok(orderService.updateOrderById(jwtUserDetails.userId(), orderId, updateOrderRequestDto));
     }

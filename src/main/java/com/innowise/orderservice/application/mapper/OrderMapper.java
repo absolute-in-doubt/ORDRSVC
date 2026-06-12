@@ -8,5 +8,4 @@ public interface OrderMapper {
 
     OrderResponseDto toDto(Order entity);
 
-    void updateEntity(UpdateOrderRequestDto updateRequest, Order order);
 }

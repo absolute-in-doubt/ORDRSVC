@@ -3,6 +3,7 @@ package com.innowise.orderservice.domain.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Table(name = "order_items")
 @Entity
@@ -16,6 +17,7 @@ public class OrderItems {
     @GeneratedValue(generator = "order_items_gen")
     private Long id;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;

@@ -10,7 +10,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import java.time.Duration;
 
 @TestConfiguration(proxyBeanMethods = false)
 @TestPropertySource(locations = "classpath:application-test.yaml")

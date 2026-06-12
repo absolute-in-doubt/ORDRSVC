@@ -11,14 +11,14 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: false
   datasource:
-    url: ${POSTGRES_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL:jdbc:postgresql://orderservice_postgres:5432/order_service_db}
+    username: ${POSTGRES_USER:myuser}
+    password: ${POSTGRES_PASSWORD:secret}
   liquibase:
     change-log: db/changelog/db.changelog-master.yaml
     enabled: true                                                                                                                                                                                                                ▆
-    url: ${POSTGRES_URL}
-    user: ${POSTGRES_USER}
+    url: ${POSTGRES_URL:secret}
+    user: ${POSTGRES_USER:myuser}
     password: ${POSTGRES_PASSWORD}
   cache:
     cache-names:
@@ -37,10 +37,10 @@ server:
 
 application:
   userservice:
-    getUserUriUnformatted: ${USRSVC_GET_USER_URI_NOT_FORMATTED}
+    getUserUriUnformatted: ${USRSVC_GET_USER_URI_NOT_FORMATTED:http://userservice:8080/api/v1/users/}
     # smth like ".../users/" , so the UserClient appends the needed userId to the end of the url: ".../users/1"
   security:
-    jwksUrl: ${JWKS_URL}
+    jwksUrl: ${JWKS_URL:http://authservice:8081/.well-known/jwks.json}
 
 resilience4j:
   circuitbreaker:
