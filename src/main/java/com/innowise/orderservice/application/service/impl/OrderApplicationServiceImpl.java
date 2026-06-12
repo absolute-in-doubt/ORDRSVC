@@ -87,7 +87,10 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
     }
 
     @Override
-    public List<FullOrderResponseDto> getOrdersByUserId(Long userId) {
+    public List<FullOrderResponseDto> getOrdersByUserId(Long userId, Long userIdPathParamValue) {
+
+        if(!userId.equals(userIdPathParamValue))
+            throw new AccessDeniedException("Cannot read orders that don't belong to you");
 
         UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
 

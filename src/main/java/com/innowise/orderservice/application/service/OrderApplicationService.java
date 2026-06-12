@@ -19,7 +19,7 @@ public interface OrderApplicationService {
 
     Page<FullOrderResponseDto> getOrderFilteredAndPaged(Long userId, OrderFilter filter, Pageable pageable);
 
-    List<FullOrderResponseDto> getOrdersByUserId(Long userId);
+    List<FullOrderResponseDto> getOrdersByUserId(Long userId, Long userIdPathParamValue);
 
     FullOrderResponseDto updateOrderById(Long userId, Long orderId , UpdateOrderRequestDto updateOrderRequest) throws OrderNotFoundException;
 
