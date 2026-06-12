@@ -151,7 +151,7 @@ class OrderApplicationServiceImplUnitTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Order> orderPage = new PageImpl<>(List.of(order), pageable, 1);
 
-        when(orderRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(orderPage);
+        when(orderRepository.findAll(any(Specification.class), eq(pageable), any(String.class))).thenReturn(orderPage);
         when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderMapper.toDto(order)).thenReturn(orderResponseDto);
 
@@ -189,6 +189,7 @@ class OrderApplicationServiceImplUnitTest {
         when(orderRepository.findByIdWithDeletedFalse(orderId)).thenReturn(Optional.of(order));
         when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderMapper.toDto(order)).thenReturn(orderResponseDto);
+        when(itemRepository.findById(eq(itemId))).thenReturn(Optional.of(item));
 
         FullOrderResponseDto result = orderApplicationService.updateOrderById(userId, orderId, updateOrderRequestDto);
 
