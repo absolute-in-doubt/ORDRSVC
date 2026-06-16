@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,31 +25,44 @@ public class UserServiceClientImpl implements UserServiceClient {
     private final RestTemplate restTemplate;
     private final AuthServiceClient authServiceClient;
 
-    private volatile boolean isJwtValid;
+    private volatile boolean isTokenValid;
     private volatile String serviceAccessToken;
 
     @Override
-    @Cacheable(cacheNames = {"userInfo"}, key = "#userId")
+    @Cacheable(cacheNames = {"userInfo"}, key = "#userId",
+            unless = "T(org.springframework.http.HttpStatus).UNAUTHORIZED.equals(#result.getStatusCode())")
     @CircuitBreaker(name = USER_SERVICE)
     @Retry(name=USER_SERVICE)
-    public UserInfoResponseDto geUserByUserId(Long userId) {
+    public UserInfoResponseDto getUserByUserId(Long userId) {
 
-        ResponseEntity<UserInfoResponseDto> response = restTemplate.getForEntity(getUserUriUnformatted + userId, UserInfoResponseDto.class);
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("Authorization", "Bearer " + serviceAccessToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+
+        ResponseEntity<UserInfoResponseDto> response = restTemplate.exchange(
+                getUserUriUnformatted + userId,
+                HttpMethod.GET,
+                request,
+                UserInfoResponseDto.class);
 
         log.trace("Get user response status: {}", response.getStatusCode());
 
         if(response.getStatusCode().equals(HttpStatus.UNAUTHORIZED)){
-            isJwtValid = false;
+            isTokenValid = false;
             updateServiceAccessToken();
         } else
-            isJwtValid = true;
+            isTokenValid = true;
 
         return response.getBody();
     }
 
     private synchronized void updateServiceAccessToken(){
-        if(isJwtValid)
+        if(isTokenValid)
             return;
-        authServiceClient.getServiceAccessToken();
+        serviceAccessToken = authServiceClient.getServiceAccessToken().accessToken();
+        isTokenValid = true;
     }
 }

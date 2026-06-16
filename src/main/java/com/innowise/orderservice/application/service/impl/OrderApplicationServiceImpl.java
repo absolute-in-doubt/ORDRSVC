@@ -55,7 +55,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
         orderRepository.save(order);
 
-        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+        UserInfoResponseDto userInfoResponse = userServiceClient.getUserByUserId(userId);
 
         return new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order));
     }
@@ -69,7 +69,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
         if(!userId.equals(order.getUserId()))
             throw new AccessDeniedException("Cannot modify an order that doesn't belong to you");
 
-        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+        UserInfoResponseDto userInfoResponse = userServiceClient.getUserByUserId(userId);
 
         return new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order));
     }
@@ -84,7 +84,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
                         OrderSpecification.withUserId(userId)
                 );
 
-        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+        UserInfoResponseDto userInfoResponse = userServiceClient.getUserByUserId(userId);
 
         return orderRepository.findAll(orderSpecification, pageable, "order-with-items")
                 .map(order -> new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order)));
@@ -96,7 +96,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
         if(!userId.equals(userIdPathParamValue))
             throw new AccessDeniedException("Cannot read orders that don't belong to you");
 
-        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+        UserInfoResponseDto userInfoResponse = userServiceClient.getUserByUserId(userId);
 
         return orderRepository.findByUserIdWithDeletedFalse(userId).stream()
                 .map(order -> new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order))).toList();
@@ -130,7 +130,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
         log.trace("Updated order; {}", order);
 
-        UserInfoResponseDto userInfoResponse = userServiceClient.geUserByUserId(userId);
+        UserInfoResponseDto userInfoResponse = userServiceClient.getUserByUserId(userId);
 
         return new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order));
     }

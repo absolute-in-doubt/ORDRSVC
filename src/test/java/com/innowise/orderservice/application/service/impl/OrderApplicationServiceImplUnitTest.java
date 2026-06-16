@@ -91,7 +91,7 @@ class OrderApplicationServiceImplUnitTest {
     void createOrder_shouldCreateOrderSuccessfully() throws ItemNotFoundException {
         when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
-        when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
+        when(userServiceClient.getUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderMapper.toDto(any(Order.class))).thenReturn(orderResponseDto);
 
         FullOrderResponseDto result = orderApplicationService.createOrder(userId, createOrderRequestDto);
@@ -101,7 +101,7 @@ class OrderApplicationServiceImplUnitTest {
         assertEquals(orderResponseDto, result.order());
         verify(orderRepository, times(1)).save(any(Order.class));
         verify(itemRepository, times(1)).findById(itemId);
-        verify(userServiceClient, times(1)).geUserByUserId(userId);
+        verify(userServiceClient, times(1)).getUserByUserId(userId);
     }
 
     @Test
@@ -117,7 +117,7 @@ class OrderApplicationServiceImplUnitTest {
     @Test
     void getOrderById_shouldReturnOrderSuccessfully() throws OrderNotFoundException {
         when(orderRepository.findByIdWithDeletedFalse(orderId)).thenReturn(Optional.of(order));
-        when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
+        when(userServiceClient.getUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderMapper.toDto(order)).thenReturn(orderResponseDto);
 
         FullOrderResponseDto result = orderApplicationService.getOrderById(userId, orderId);
@@ -152,7 +152,7 @@ class OrderApplicationServiceImplUnitTest {
         Page<Order> orderPage = new PageImpl<>(List.of(order), pageable, 1);
 
         when(orderRepository.findAll(any(Specification.class), eq(pageable), any(String.class))).thenReturn(orderPage);
-        when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
+        when(userServiceClient.getUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderMapper.toDto(order)).thenReturn(orderResponseDto);
 
         Page<FullOrderResponseDto> result = orderApplicationService.getOrderFilteredAndPaged(userId, filter, pageable);
@@ -165,7 +165,7 @@ class OrderApplicationServiceImplUnitTest {
 
     @Test
     void getOrdersByUserId_shouldReturnOrders() {
-        when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
+        when(userServiceClient.getUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderRepository.findByUserIdWithDeletedFalse(userId)).thenReturn(List.of(order));
         when(orderMapper.toDto(order)).thenReturn(orderResponseDto);
 
@@ -187,7 +187,7 @@ class OrderApplicationServiceImplUnitTest {
     @Test
     void updateOrderById_shouldUpdateOrderSuccessfully() throws OrderNotFoundException, ItemNotFoundException {
         when(orderRepository.findByIdWithDeletedFalse(orderId)).thenReturn(Optional.of(order));
-        when(userServiceClient.geUserByUserId(userId)).thenReturn(userInfoResponseDto);
+        when(userServiceClient.getUserByUserId(userId)).thenReturn(userInfoResponseDto);
         when(orderMapper.toDto(order)).thenReturn(orderResponseDto);
         when(itemRepository.findById(eq(itemId))).thenReturn(Optional.of(item));
 

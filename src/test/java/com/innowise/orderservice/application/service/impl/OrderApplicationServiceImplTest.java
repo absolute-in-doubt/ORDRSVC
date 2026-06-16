@@ -61,7 +61,7 @@ class OrderApplicationServiceImplTest {
         itemRepository.deleteAll();
 
         userInfoResponseDto = new UserInfoResponseDto(1L, "John", "Doe", "john@example.com", true);
-        when(userServiceClient.geUserByUserId(any(Long.class))).thenReturn(userInfoResponseDto);
+        when(userServiceClient.getUserByUserId(any(Long.class))).thenReturn(userInfoResponseDto);
 
         item = new Item();
         item.setName("Test Item");
