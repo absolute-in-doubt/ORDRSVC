@@ -1,4 +1,4 @@
-package com.innowise.orderservice.infrastructure.adapter.out;
+package com.innowise.orderservice.infrastructure.adapter.out.impl;
 
 import com.innowise.orderservice.domain.model.Order;
 import com.innowise.orderservice.domain.port.out.CustomOrderRepository;
