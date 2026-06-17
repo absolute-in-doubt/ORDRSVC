@@ -147,7 +147,7 @@ class OrderApplicationServiceImplUnitTest {
 
     @Test
     void getOrderFilteredAndPaged_shouldReturnPagedOrders() {
-        OrderFilter filter = new OrderFilter(LocalDateTime.now(), List.of(OrderStatus.CREATED));
+        OrderFilter filter = new OrderFilter(LocalDateTime.now(),LocalDateTime.now(), List.of(OrderStatus.CREATED));
         Pageable pageable = PageRequest.of(0, 10);
         Page<Order> orderPage = new PageImpl<>(List.of(order), pageable, 1);
 

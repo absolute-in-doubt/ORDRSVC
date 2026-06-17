@@ -150,7 +150,7 @@ class OrderApplicationServiceImplTest {
         order2.setDeleted(false);
         orderRepository.save(order2);
 
-        OrderFilter filter = new OrderFilter(null, List.of(OrderStatus.CREATED));
+        OrderFilter filter = new OrderFilter(null, null, List.of(OrderStatus.CREATED));
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<FullOrderResponseDto> result = orderApplicationService.getOrderFilteredAndPaged(userId, filter, pageable);

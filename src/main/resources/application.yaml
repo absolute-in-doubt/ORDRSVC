@@ -33,9 +33,9 @@ server:
   port: 8082
 
 application:
-  id: ${APPLICATION_CLIENT_ID}
-  login: ${APPLICATION_CLIENT_LOGIN}
-  secret: ${APPLICATION_CLIENT_SECRET}
+  id: ${APPLICATION_CLIENT_ID:123}
+  login: ${APPLICATION_CLIENT_LOGIN:application_service_test}
+  secret: ${APPLICATION_CLIENT_SECRET:secret}
 
   userservice:
     getUserUriUnformatted: ${USRSVC_GET_USER_URI_NOT_FORMATTED:http://userservice:8080/api/v1/users/}
