@@ -142,6 +142,7 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
     }
 
     @Override
+    @Transactional
     public void deleteOrderById(Long userId, Long orderId) throws OrderNotFoundException {
 
         Order order = orderRepository.findByIdWithDeletedFalse(orderId)
