@@ -1,7 +1,10 @@
 package com.innowise.orderservice.application.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public record OrderItemRequestDto(
-        Long itemId,
-        Long quantity
+        @NotNull Long itemId,
+        @NotNull @Positive Long quantity
 ) {
 }

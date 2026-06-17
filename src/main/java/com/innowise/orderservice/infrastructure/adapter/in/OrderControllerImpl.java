@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class OrderControllerImpl implements OrderController {
     @PostMapping
     public ResponseEntity<FullOrderResponseDto> createOrder(
             @AuthenticationPrincipal JwtUserDetails jwtUserDetails,
-            @RequestBody CreateOrderRequestDto createOrderRequestDto)
+            @RequestBody @Valid CreateOrderRequestDto createOrderRequestDto)
             throws ItemNotFoundException {
 
         return ResponseEntity.ok(orderService.createOrder(jwtUserDetails.userId(), createOrderRequestDto));
@@ -73,7 +74,7 @@ public class OrderControllerImpl implements OrderController {
     public ResponseEntity<FullOrderResponseDto> updateOrderById(
             @AuthenticationPrincipal JwtUserDetails jwtUserDetails,
             @PathVariable("orderId") Long orderId,
-            @RequestBody UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException, ItemNotFoundException {
+            @RequestBody @Valid UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException, ItemNotFoundException {
 
         return ResponseEntity.ok(orderService.updateOrderById(jwtUserDetails.userId(), orderId, updateOrderRequestDto));
     }

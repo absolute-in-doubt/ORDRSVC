@@ -1,5 +1,6 @@
 package com.innowise.orderservice.domain.port.in;
 
+import jakarta.validation.Valid;
 import com.innowise.orderservice.application.dto.CreateOrderRequestDto;
 import com.innowise.orderservice.application.dto.FullOrderResponseDto;
 import com.innowise.orderservice.application.dto.OrderFilter;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public interface OrderController {
 
-    ResponseEntity<FullOrderResponseDto> createOrder(JwtUserDetails jwtUserDetails, CreateOrderRequestDto createOrderRequestDto) throws ItemNotFoundException;
+    ResponseEntity<FullOrderResponseDto> createOrder(JwtUserDetails jwtUserDetails, @Valid CreateOrderRequestDto createOrderRequestDto) throws ItemNotFoundException;
 
     ResponseEntity<FullOrderResponseDto> getOrderById(JwtUserDetails jwtUserDetails, Long orderId) throws OrderNotFoundException;
 
@@ -23,7 +24,7 @@ public interface OrderController {
 
     ResponseEntity<List<FullOrderResponseDto>> getOrdersByUserId(JwtUserDetails jwtUserDetails, Long userId);
 
-    ResponseEntity<FullOrderResponseDto> updateOrderById(JwtUserDetails jwtUserDetails, Long orderId, UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException, ItemNotFoundException;
+    ResponseEntity<FullOrderResponseDto> updateOrderById(JwtUserDetails jwtUserDetails, Long orderId, @Valid UpdateOrderRequestDto updateOrderRequestDto) throws OrderNotFoundException, ItemNotFoundException;
 
     ResponseEntity<Void> deleteById(JwtUserDetails jwtUserDetails, Long orderId) throws OrderNotFoundException;
 
