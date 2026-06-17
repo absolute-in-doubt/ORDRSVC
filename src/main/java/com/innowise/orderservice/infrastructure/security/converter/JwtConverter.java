@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private static class JwtClaim {
-        static String LOGIN = "login";
-        static String ROLES = "roles";
+        private static final String LOGIN = "login";
+        private static final String ROLES = "roles";
     }
 
     @Override
