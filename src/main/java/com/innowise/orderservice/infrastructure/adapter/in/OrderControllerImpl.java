@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -30,13 +31,16 @@ public class OrderControllerImpl implements OrderController {
     private final OrderApplicationService orderService;
 
     @Override
-    @PostMapping
+    @PostMapping("/order")
     public ResponseEntity<FullOrderResponseDto> createOrder(
             @AuthenticationPrincipal UserContext userContext,
             @RequestBody @Valid CreateOrderRequestDto createOrderRequestDto)
             throws ItemNotFoundException {
 
-        return ResponseEntity.ok(orderService.createOrder(userContext.userId(), createOrderRequestDto));
+        FullOrderResponseDto responseDto = orderService.createOrder(userContext.userId(), createOrderRequestDto)
+
+        return ResponseEntity.created(URI.create("/api/v1/orders/" + responseDto.order().id()))
+                .body(orderService.createOrder(userContext.userId(), createOrderRequestDto));
     }
 
     @Override
