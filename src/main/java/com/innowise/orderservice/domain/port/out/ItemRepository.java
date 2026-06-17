@@ -11,7 +11,4 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-//    @Query("SELECT it FROM Item it WHERE it.id IN :itemIds")
-//    List<Item> findAllWithIdIn(@Param("itemIds") List<Long> itemIds);
-
 }

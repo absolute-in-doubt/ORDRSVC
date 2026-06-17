@@ -35,7 +35,13 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
     private final UserServiceClient userServiceClient;
 
     @Override
-    //Not transactional
+    /**
+     * Non Transactional
+     * Because: the first part are just queries that don't require any cascading or lazy loading.
+     * If anything fails, it fails before the save().
+     * If item gets deleted after it's read, save() just fails (may add @Retryable).
+     * So adding @Transactional would just slow down the method a bit and add additional pressure on the DB.
+     */
     public FullOrderResponseDto createOrder(Long userId, CreateOrderRequestDto createOrderRequest) throws ItemNotFoundException {
 
         Order order = new Order();
@@ -53,9 +59,9 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
             order.addOrderItems(orderItems);
         }
 
-        orderRepository.save(order);
-
         UserInfoResponseDto userInfoResponse = userServiceClient.getUserByUserId(userId);
+
+        orderRepository.save(order);
 
         return new FullOrderResponseDto(userInfoResponse, orderMapper.toDto(order));
     }
