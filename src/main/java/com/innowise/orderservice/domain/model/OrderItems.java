@@ -1,19 +1,19 @@
 package com.innowise.orderservice.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Table(name = "order_items")
 @Entity
-@Data
+@Getter @Setter @ToString
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class OrderItems {
 
     @SequenceGenerator(name = "order_items_gen", sequenceName = "order_items_seq")
 
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(generator = "order_items_gen")
     private Long id;
 

@@ -1,7 +1,7 @@
 package com.innowise.orderservice.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,7 +31,8 @@ import java.util.List;
 )
 @Entity
 @EntityListeners({AuditingEntityListener.class})
-@Data
+@Getter @Setter @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Order {
 
     public Order(){
@@ -41,11 +42,14 @@ public class Order {
     @SequenceGenerator(name = "order_gen", sequenceName = "order_seq")
 
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(generator = "order_gen")
     private Long id;
     @Column(name="user_id")
     private Long userId;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @Column(name = "total_price")
