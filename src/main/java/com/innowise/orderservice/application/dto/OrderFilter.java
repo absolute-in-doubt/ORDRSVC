@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record OrderFilter(
-        LocalDateTime creationDate,
+        LocalDateTime creationDateFrom,
+        LocalDateTime creationDateTo,
         List<OrderStatus> orderStatuses
 ) {
 }

@@ -10,9 +10,14 @@ import java.util.List;
 
 public class OrderSpecification {
 
-    public static Specification<Order> withCreationDate(LocalDateTime creationDate){
-        return (root, query, cb) -> (creationDate == null)? null :
-                cb.equal(root.get("createdAt"), creationDate);
+    public static Specification<Order> withCreationDateAfter(LocalDateTime creationDateTo){
+        return (root, query, cb) -> (creationDateTo == null)? null :
+                cb.lessThanOrEqualTo(root.get("createdAt"), creationDateTo);
+    }
+
+    public static Specification<Order> withCreationDateBefore(LocalDateTime creationDateFrom){
+        return (root, query, cb) -> (creationDateFrom == null)? null :
+                cb.greaterThanOrEqualTo(root.get("createdAt"), creationDateFrom);
     }
 
     public static Specification<Order> withAnyStatus(List<OrderStatus> statuses){
@@ -31,7 +36,8 @@ public class OrderSpecification {
 
     public static Specification<Order> fromFilter(OrderFilter filter){
         return Specification.allOf(
-                withCreationDate(filter.creationDate()),
+                withCreationDateBefore(filter.creationDateFrom()),
+                withCreationDateAfter(filter.creationDateTo()),
                 withAnyStatus(filter.orderStatuses()),
                 withDeletedFalse()
         );
