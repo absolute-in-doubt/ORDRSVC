@@ -1,11 +1,8 @@
-package com.innowise.orderservice.infrastructure.persistence.specification;
+package com.innowise.orderservice.application.specification;
 
 import com.innowise.orderservice.application.dto.OrderFilter;
 import com.innowise.orderservice.domain.model.Order;
-import com.innowise.orderservice.domain.model.OrderItems;
 import com.innowise.orderservice.domain.model.OrderStatus;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;

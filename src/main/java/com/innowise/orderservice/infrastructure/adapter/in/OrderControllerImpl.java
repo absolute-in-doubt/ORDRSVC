@@ -37,7 +37,7 @@ public class OrderControllerImpl implements OrderController {
             @RequestBody @Valid CreateOrderRequestDto createOrderRequestDto)
             throws ItemNotFoundException {
 
-        FullOrderResponseDto responseDto = orderService.createOrder(userContext.userId(), createOrderRequestDto)
+        FullOrderResponseDto responseDto = orderService.createOrder(userContext.userId(), createOrderRequestDto);
 
         return ResponseEntity.created(URI.create("/api/v1/orders/" + responseDto.order().id()))
                 .body(orderService.createOrder(userContext.userId(), createOrderRequestDto));
