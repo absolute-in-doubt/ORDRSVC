@@ -223,7 +223,7 @@
 				<version>5.0.2</version>
 				<configuration>
 
-					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+					<propertyFile>liquibase.properties</propertyFile>
 					<includeArtifact>true</includeArtifact>
 				</configuration>
 				<dependencies>

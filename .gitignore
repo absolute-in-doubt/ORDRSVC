@@ -34,7 +34,7 @@ build/
 
 
 ### Application ###
-src/main/resources/liquibase.properties
+liquibase.properties
 env
 env/app.env
 env/postgres.env

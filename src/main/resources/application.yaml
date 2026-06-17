@@ -3,7 +3,7 @@ spring:
     name: orderservice
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         connection:
@@ -16,10 +16,7 @@ spring:
     password: ${POSTGRES_PASSWORD:secret}
   liquibase:
     change-log: db/changelog/db.changelog-master.yaml
-    enabled: true                                                                                                                                                                                                                ▆
-    url: ${POSTGRES_URL:secret}
-    user: ${POSTGRES_USER:myuser}
-    password: ${POSTGRES_PASSWORD}
+    enabled: true
   cache:
     cache-names:
       - userInfo
