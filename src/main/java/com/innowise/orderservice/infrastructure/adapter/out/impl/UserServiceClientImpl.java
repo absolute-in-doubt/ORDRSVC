@@ -3,7 +3,6 @@ package com.innowise.orderservice.infrastructure.adapter.out.impl;
 import com.innowise.orderservice.application.dto.UserInfoResponseDto;
 import com.innowise.orderservice.domain.port.out.UserServiceClient;
 import com.innowise.orderservice.infrastructure.adapter.out.AuthServiceClient;
-import com.innowise.orderservice.infrastructure.security.dto.ServiceAuthenticationRequestDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -29,8 +29,7 @@ public class UserServiceClientImpl implements UserServiceClient {
     private volatile String serviceAccessToken;
 
     @Override
-    @Cacheable(cacheNames = {"userInfo"}, key = "#userId",
-            unless = "T(org.springframework.http.HttpStatus).UNAUTHORIZED.equals(#result.getStatusCode())")
+    @Cacheable(cacheNames = {"userInfo"}, key = "#userId", unless = "#result == null")
     @CircuitBreaker(name = USER_SERVICE)
     @Retry(name=USER_SERVICE)
     public UserInfoResponseDto getUserByUserId(Long userId) {
@@ -53,6 +52,8 @@ public class UserServiceClientImpl implements UserServiceClient {
         if(response.getStatusCode().equals(HttpStatus.UNAUTHORIZED)){
             isTokenValid = false;
             updateServiceAccessToken();
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED,
+                    "Unauthorized - token refresh triggered");
         } else
             isTokenValid = true;
 

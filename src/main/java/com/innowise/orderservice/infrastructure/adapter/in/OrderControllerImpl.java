@@ -31,7 +31,7 @@ public class OrderControllerImpl implements OrderController {
     private final OrderApplicationService orderService;
 
     @Override
-    @PostMapping("/order")
+    @PostMapping("/orders")
     public ResponseEntity<FullOrderResponseDto> createOrder(
             @AuthenticationPrincipal UserContext userContext,
             @RequestBody @Valid CreateOrderRequestDto createOrderRequestDto)
