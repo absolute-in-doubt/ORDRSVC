@@ -36,8 +36,8 @@ public class OrderSpecification {
 
     public static Specification<Order> fromFilter(OrderFilter filter){
         return Specification.allOf(
-                withCreationDateBefore(filter.creationDateFrom()),
-                withCreationDateAfter(filter.creationDateTo()),
+                withCreationDateBefore(filter.creationDateTo()),
+                withCreationDateAfter(filter.creationDateFrom()),
                 withAnyStatus(filter.orderStatuses()),
                 withDeletedFalse()
         );

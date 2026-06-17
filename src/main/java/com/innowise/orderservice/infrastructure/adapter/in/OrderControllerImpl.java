@@ -40,7 +40,7 @@ public class OrderControllerImpl implements OrderController {
         FullOrderResponseDto responseDto = orderService.createOrder(userContext.userId(), createOrderRequestDto);
 
         return ResponseEntity.created(URI.create("/api/v1/orders/" + responseDto.order().id()))
-                .body(orderService.createOrder(userContext.userId(), createOrderRequestDto));
+                .body(responseDto);
     }
 
     @Override
