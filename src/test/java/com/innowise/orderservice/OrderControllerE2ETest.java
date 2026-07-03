@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,6 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 "application.authService.getServiceAccessTokenUri=http://localhost:8090/api/v1/auth/service/authenticate"
         }
 )
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Testcontainers
 @ContextConfiguration(classes = TestcontainersConfiguration.class)
