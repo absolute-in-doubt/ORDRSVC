@@ -1,0 +1,39 @@
+package com.innowise.orderservice.domain.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Table(name = "items")
+@Entity
+@EntityListeners({AuditingEntityListener.class})
+@Getter @Setter @ToString
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Item {
+
+    @SequenceGenerator(name = "items_gen", sequenceName = "items_seq")
+
+    @Id
+    @EqualsAndHashCode.Include
+    @GeneratedValue(generator = "items_gen")
+    private Long id;
+
+    private String name;
+
+    private BigDecimal price;
+
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+}
