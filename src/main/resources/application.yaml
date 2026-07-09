@@ -51,6 +51,7 @@ application:
       client-id-prefix: order-service-
     topics:
       update-order-status: ${UPDATE_ORDER_STATUS_KAFKA_TOPIC_NAME}
+      update-order-status-dlq: ${UPDATE_ORDER_STATUS_KAFKA_TOPIC_NAME}.DLQ
     consumer:
       group-id: order-service-consumers
 

@@ -24,6 +24,7 @@ application:
       client-id-prefix: order-service-
     topics:
       update-order-status: testtopic
+      update-order-status-dlq: testtopic.DLQ
     consumer:
       group-id: order-service-consumers
 

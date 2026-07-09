@@ -11,12 +11,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
-/**
- * [No Inbox](https://www.youtube.com/watch?v=kr5TtRktdYE)
- * No point in talking about any kind of guarantees here
- * Messages gonna get lost, duplicated, everyone is gonna die, and I'm gonna get some sleep
- */
-
 
 @Slf4j
 @Component
@@ -34,7 +28,7 @@ public class UpdateOrderKafkaListener {
             groupId = "${application.kafka.consumer.group-id}",
             containerFactory = "kafkaListenerContainerFactory"
     )
-    void listener(String data, Acknowledgment ack){
+    void listener(String data, Acknowledgment ack) throws JsonProcessingException, OrderNotFoundException {
 
         try {
             UpdateOrderStatusRequestDto requestDto = objectMapper.readValue(data, UpdateOrderStatusRequestDto.class);
@@ -43,10 +37,10 @@ public class UpdateOrderKafkaListener {
             ack.acknowledge();
         } catch (JsonProcessingException e) {
             log.warn("Failed to deserialize an event received via Kafka. The initial json: {}", data);
-            throw new RuntimeException(e);
+            throw e;
         } catch (OrderNotFoundException e) {
             log.warn("Received a request to update status of non existent order: {}", data);
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 }
