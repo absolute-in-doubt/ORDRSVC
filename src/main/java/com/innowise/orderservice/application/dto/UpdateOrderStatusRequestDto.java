@@ -2,13 +2,6 @@ package com.innowise.orderservice.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.innowise.orderservice.domain.model.OrderStatus;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.data.annotation.Id;
-
-import java.time.LocalDateTime;
 
 /**
  * Received via Kafka
