@@ -17,6 +17,16 @@ application:
     getServiceAccessTokenUri: "http://localhost:8090/api/v1/auth/service/authenticate"
   security:
     jwksUrl: "http://localhost:8090/.well-known/jwks.json"
+  kafka:
+    bootstrap-servers: kafka:9092
+    listener:
+      auto-startup: false
+      client-id-prefix: order-service-
+    topics:
+      update-order-status: testtopic
+      update-order-status-dlq: testtopic.DLQ
+    consumer:
+      group-id: order-service-consumers
 
 resilience4j:
   circuitbreaker:

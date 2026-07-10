@@ -1,9 +1,6 @@
 package com.innowise.orderservice.application.service;
 
-import com.innowise.orderservice.application.dto.CreateOrderRequestDto;
-import com.innowise.orderservice.application.dto.FullOrderResponseDto;
-import com.innowise.orderservice.application.dto.OrderFilter;
-import com.innowise.orderservice.application.dto.UpdateOrderRequestDto;
+import com.innowise.orderservice.application.dto.*;
 import com.innowise.orderservice.domain.exception.ItemNotFoundException;
 import com.innowise.orderservice.domain.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
@@ -24,4 +21,6 @@ public interface OrderApplicationService {
     FullOrderResponseDto updateOrderById(Long userId, Long orderId , UpdateOrderRequestDto updateOrderRequest) throws OrderNotFoundException, ItemNotFoundException;
 
     void deleteOrderById(Long userId, Long orderId) throws OrderNotFoundException;
+
+    void updateOrderStatus(UpdateOrderStatusRequestDto requestDto) throws OrderNotFoundException;
 }

@@ -153,4 +153,13 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
         orderRepository.deleteById(orderId);
     }
+
+    @Override
+    @Transactional
+    public void updateOrderStatus(UpdateOrderStatusRequestDto requestDto) throws OrderNotFoundException {
+
+        Order order = orderRepository.findByIdWithDeletedFalse(requestDto.orderId())
+                .orElseThrow(() -> new OrderNotFoundException(requestDto.orderId()));
+        order.setStatus(requestDto.orderStatus());
+    }
 }
