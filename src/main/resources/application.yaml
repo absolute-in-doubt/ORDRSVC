@@ -47,6 +47,7 @@ application:
     paths:
       publicPaths:
         - /actuator/health
+        - /actuator/health/**
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     listener:
