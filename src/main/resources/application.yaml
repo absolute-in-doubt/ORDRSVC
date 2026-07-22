@@ -3,7 +3,7 @@ spring:
     name: orderservice
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         connection:
@@ -44,6 +44,10 @@ application:
     getServiceAccessTokenUri: ${AUTHSVC_GET_SERVICE_ACCESS_TOKEN_URI:http://authservice:8081/api/v1/auth/service/authenticate}}
   security:
     jwksUrl: ${JWKS_URL:http://authservice:8081/.well-known/jwks.json}
+    paths:
+      publicPaths:
+        - /actuator/health
+        - /actuator/health/**
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     listener:
